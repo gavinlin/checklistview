@@ -1,5 +1,9 @@
 language: android
 
+branches:
+    only:
+        - master
+
 before_install:
 - yes | sdkmanager "platforms;android-27"
 
@@ -7,11 +11,17 @@ before_install:
 android:
     components:
         - build-tools-27.0.3
+        - tools
+        - tools
+        - android-22
+        - android-26
+
+        - sys-img-armeabi-v7a-android-22
 
 sudo: false
 
 before_script:
-  - echo no | android create avd --force -n test -t android-21 --abi armeabi-v7a
+  - echo no | android create avd --force -n test -t android-22 --abi armeabi-v7a
   - emulator -avd test -no-skin -no-audio -no-window &
   - android-wait-for-emulator
   - adb shell input keyevent 82 &
