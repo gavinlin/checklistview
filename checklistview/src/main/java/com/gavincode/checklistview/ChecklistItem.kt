@@ -6,19 +6,23 @@ import android.text.Editable
 import android.text.InputType
 import android.text.TextWatcher
 import android.util.AttributeSet
+import android.view.KeyEvent
 import android.view.LayoutInflater
-import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
 
 
 class ChecklistItem: LinearLayout {
 
     lateinit var rootView: LinearLayout
     lateinit var checkbox: CheckBox
-    lateinit var editText: EditText
+    lateinit var editText: CheckListEditText
     lateinit var dragHandle: ImageView
     lateinit var deleteView: ImageButton
+    lateinit var add: ImageButton
 
     private var listener: OnChecklistItemEventListener? = null
 
@@ -38,6 +42,7 @@ class ChecklistItem: LinearLayout {
         editText = view.findViewById(R.id.checklist_item_edittext)
         deleteView = view.findViewById(R.id.checklist_item_delete)
         dragHandle = view.findViewById(R.id.checklist_item_drag_handle)
+        add = view.findViewById(R.id.checklist_item_add_icon)
 
         checkbox.setOnCheckedChangeListener {
             _, isChecked ->
@@ -48,16 +53,15 @@ class ChecklistItem: LinearLayout {
             imeOptions = EditorInfo.IME_ACTION_NEXT
             setRawInputType(InputType.TYPE_CLASS_TEXT)
             setOnFocusChangeListener { v, hasFocus ->
-                when(hasFocus) {
-                    true -> {
-                        dragHandle.visibility = View.GONE
-                    }
-                    else -> {
-                        dragHandle.visibility = View.VISIBLE
-                        listener?.onChanged(ChecklistItemEvent.OnLostFocus(this@ChecklistItem))
-                    }
-                }
+                listener?.onChanged(ChecklistItemEvent.OnFocusChanged(this@ChecklistItem, hasFocus))
             }
+        }
+
+        editText.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_DEL) {
+                if (isEmpty()) listener?.onChanged(ChecklistItemEvent.OnChecklistItemRemovedByIME(this))
+            }
+            false
         }
 
         editText.setOnEditorActionListener { v, actionId, event ->
