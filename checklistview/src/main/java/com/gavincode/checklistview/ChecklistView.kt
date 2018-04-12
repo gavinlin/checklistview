@@ -82,8 +82,13 @@ class ChecklistView: LinearLayout, OnChecklistItemEventListener {
 
     private fun handleCheckListItemRemoved(item: ChecklistItem) {
         if (parent.childCount > 1) {
-            parent.requestFocus()
+            val index = parent.indexOfChild(item)
             parent.removeDragView(item)
+            if (index == parent.childCount) {
+                parent.getChildAt(index - 1).requestFocus()
+            } else {
+                parent.getChildAt(index).requestFocus()
+            }
         } else {
             item.editText.text.clear()
         }
