@@ -32,6 +32,8 @@ class ChecklistView: LinearLayout, OnChecklistItemEventListener {
         newItem.editText.setText(text)
         newItem.checkbox.isChecked = checked
         newItem.setListener(this)
+        newItem.checkbox.visibility = View.VISIBLE
+        newItem.add.visibility = View.GONE
         when(draggable) {
             true -> { parent.addDragView(newItem, newItem.dragHandle) }
             else -> parent.addView(newItem)
