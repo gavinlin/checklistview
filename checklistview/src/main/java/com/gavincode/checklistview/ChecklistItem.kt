@@ -19,7 +19,7 @@ class ChecklistItem: LinearLayout {
 
     lateinit var rootView: LinearLayout
     lateinit var checkbox: CheckBox
-    lateinit var editText: CheckListEditText
+    lateinit var editText: ChecklistEditText
     lateinit var dragHandle: ImageView
     lateinit var deleteView: ImageButton
     lateinit var add: ImageButton

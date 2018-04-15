@@ -26,7 +26,20 @@ class ChecklistView: LinearLayout, OnChecklistItemEventListener {
         addItem(false, true)
     }
 
-    fun addItem(dragable: Boolean, hasFocus: Boolean) {
+    private fun addItem(text: String, checked: Boolean,
+                        draggable: Boolean, hasFocus: Boolean) {
+        val newItem = ChecklistItem(context)
+        newItem.editText.setText(text)
+        newItem.checkbox.isChecked = checked
+        newItem.setListener(this)
+        when(draggable) {
+            true -> { parent.addDragView(newItem, newItem.dragHandle) }
+            else -> parent.addView(newItem)
+        }
+        if (hasFocus) newItem.requestFocus()
+    }
+
+    private fun addItem(dragable: Boolean, hasFocus: Boolean) {
         val newItem = ChecklistItem(context)
 
         newItem.setListener(this)
@@ -37,7 +50,7 @@ class ChecklistView: LinearLayout, OnChecklistItemEventListener {
         if (hasFocus) newItem.requestFocus()
     }
 
-    fun addItem(index: Int) {
+    private fun addItem(index: Int) {
         val newItem = ChecklistItem(context)
         newItem.setListener(this)
         parent.addDragView(newItem, newItem.dragHandle, index)
@@ -109,5 +122,34 @@ class ChecklistView: LinearLayout, OnChecklistItemEventListener {
             item.dragHandle.visibility = View.VISIBLE
             parent.setViewDraggable(item, item.dragHandle)
         }
+    }
+
+    fun getChecklistData(): List<ChecklistData> {
+        val list = mutableListOf<ChecklistData>()
+
+        for (index in 0..(parent.childCount - 1)) {
+            val child = parent.getChildAt(index)
+            if (child is ChecklistItem) {
+                val checklistItem = child as ChecklistItem
+                if (!checklistItem.isEmpty()) {
+                    list.add(ChecklistData(checklistItem.editText.text.toString(),
+                            checklistItem.isChecked()
+                            ))
+                }
+            }
+        }
+        return list
+    }
+
+    fun setChecklistData(list: List<ChecklistData>) {
+        clear()
+        for (data in list) {
+            addItem(data.text, data.checked, true, false)
+        }
+
+    }
+
+    fun clear() {
+        parent.removeAllViews()
     }
 }

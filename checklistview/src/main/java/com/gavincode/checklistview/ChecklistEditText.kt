@@ -6,7 +6,7 @@ import android.view.KeyEvent
 import android.widget.EditText
 
 
-class CheckListEditText: EditText {
+class ChecklistEditText: EditText {
     constructor(context: Context): super(context)
     constructor(context: Context, attrs: AttributeSet): super(context, attrs)
     constructor(context: Context, attrs: AttributeSet, defStyle: Int)

@@ -22,7 +22,7 @@
         android:padding="4dp"
         android:src="@drawable/ic_add_grey_24dp" />
 
-    <com.gavincode.checklistview.CheckListEditText
+    <com.gavincode.checklistview.ChecklistEditText
         android:id="@+id/checklist_item_edittext"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
